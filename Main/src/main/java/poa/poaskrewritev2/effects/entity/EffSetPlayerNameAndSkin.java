@@ -21,6 +21,7 @@ import poa.packets.FakePlayer;
 import poa.packets.SendPacket;
 import poa.packets.TeamPacket;
 import poa.poaskrewritev2.PoaSkRewritev2;
+import poa.poaskrewritev2.util.ScheduleUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -109,7 +110,7 @@ public class EffSetPlayerNameAndSkin extends Effect implements Listener {
 
         //Bukkit.broadcastMessage("Name: " + name + "    Skin: " + skinName);
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(PoaSkRewritev2.getINSTANCE(),
+        ScheduleUtil.GLOBAL.runTaskLaterAsynchronously(PoaSkRewritev2.getINSTANCE(),
                 () -> FakePlayer.spawnFakePlayer(List.of(player), name, skinName, target.getLocation(), true, target.getPing(), target.getEntityId(), UUID.randomUUID()),
                 1L);
 

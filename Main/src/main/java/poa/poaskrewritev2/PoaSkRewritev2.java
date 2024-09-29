@@ -3,6 +3,7 @@ package poa.poaskrewritev2;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import poa.poaskrewritev2.effects.entity.EffSetPlayerNameAndSkin;
@@ -21,7 +22,6 @@ public final class PoaSkRewritev2 extends JavaPlugin {
         INSTANCE = this;
 
         getCommand("poasktest").setExecutor(new TestCommand());
-
 
 
         SkriptAddon skriptAddon = Skript.registerAddon(this);

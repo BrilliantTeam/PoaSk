@@ -1,5 +1,6 @@
 package poa.guardian;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -16,6 +17,7 @@ import poa.packets.TeamPacket1204;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class GuardianBeam1204 {
@@ -35,7 +37,7 @@ public class GuardianBeam1204 {
     Location batLoc;
     String color;
     Plugin plugin;
-    int taskID;
+    ScheduledTask taskID;
 
     public GuardianBeam1204(List<Player> players, String id, Location startLoc, Location endLoc, String color, Plugin plugin) {
 //        if(dataMap.containsKey(id)){
@@ -133,7 +135,7 @@ public class GuardianBeam1204 {
     }
 
     public void loop() {
-        this.taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+        this.taskID = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, (ignored) -> {
             boolean skip = true;
             for (UUID player : uuids) {
                 if (Bukkit.getPlayer(player) != null) {
@@ -153,9 +155,9 @@ public class GuardianBeam1204 {
 
                 CraftPlayer craftPlayer = (CraftPlayer) player;
 
-                runCheckAndShow(craftPlayer);
+                craftPlayer.getScheduler().run(plugin, (ignored2) -> runCheckAndShow(craftPlayer), null);
             }
-        }, 20L, 20L).getTaskId();
+        }, 1000L, 1000L, TimeUnit.MILLISECONDS);
 
 
     }
@@ -170,7 +172,9 @@ public class GuardianBeam1204 {
             CraftPlayer craftPlayer = (CraftPlayer) player;
             craftPlayer.getHandle().connection.send((Packet<?>) removePacket);
         }
-        Bukkit.getScheduler().cancelTask(this.taskID);
+
+        if (!taskID.isCancelled())
+            taskID.cancel();
         //  dataMap.remove(this.beamID);
     }
 

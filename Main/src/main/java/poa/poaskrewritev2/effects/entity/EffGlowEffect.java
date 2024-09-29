@@ -16,6 +16,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import poa.poaskrewritev2.util.ScheduleUtil;
 import poa.util.GetPose;
 import poa.packets.Metadata;
 import poa.packets.SendPacket;
@@ -108,7 +109,7 @@ public class EffGlowEffect extends Effect implements Listener {
                 SendPacket.sendPacket(player, TeamPacket.teamPacketForGlow(uuid, chatColor, List.of(uuid)));
 
                 if (entity instanceof Player p) //this is to update the glowing forcefully
-                    Bukkit.getScheduler().runTaskLater(PoaSkRewritev2.getINSTANCE(), () -> {
+                    ScheduleUtil.ENTITY.runTaskLater(PoaSkRewritev2.getINSTANCE(), p, () -> {
                         p.setSilent(p.isSilent());
                     }, 1L);
             }
